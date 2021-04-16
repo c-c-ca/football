@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.Model;
+import Model.*;
 import View.View;
 
 import java.awt.*;
@@ -67,9 +67,16 @@ public class Controller {
                                 header.setBackground(Color.LIGHT_GRAY);
                                 header.setForeground(Color.BLACK);
                             }
-                            JLabel header = ((JLabel) e.getSource());
+                            JLabel header = (JLabel) e.getSource();
                             header.setBackground(Color.DARK_GRAY);
                             header.setForeground(Color.WHITE);
+                            
+                            FootballPlayerData fpData = model.getFpData();
+                            fpData.setSortField(
+                                    headers.indexOf(header)
+                            );
+                            fpData.sort();
+                            updateView();
                         }
                     }
             );

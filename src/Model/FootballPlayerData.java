@@ -3,16 +3,25 @@ package Model;
 import java.beans.XMLDecoder;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.util.ArrayList;
+import java.util.*;
 
-public class FootballPlayerData extends FootballPlayer implements TableData, Displayable {
+public class FootballPlayerData extends FootballPlayer implements TableData, Displayable, Sortable {
     
     private final static int DEFAULT_TABLE_SIZE = 10;
-
+    
+    private final static int NUMBER = 0;
+    private final static int POSITION = 1;
+    private final static int NAME = 2;
+    private final static int HEIGHT = 3;
+    private final static int WEIGHT = 4;
+    private final static int HOMETOWN = 5;
+    private final static int HIGH_SCHOOL = 6;
+    
     private ArrayList<TableMember> players;
     private int firstLineToDisplay;
     private int linesBeingDisplayed;
     private int lineToHighlight;
+    private int sortField;
 
 
     public FootballPlayerData()
@@ -21,6 +30,7 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
         firstLineToDisplay = 0;
         linesBeingDisplayed = DEFAULT_TABLE_SIZE;
         lineToHighlight = -1;
+        sortField = NUMBER;
         loadTable();
     }
     
@@ -130,6 +140,51 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
         {
             xx.printStackTrace();
         }
+    }
+    
+    public void sort() {
+        switch (sortField) {
+            case NUMBER:
+                System.out.println("Number");
+                break;
+            case POSITION:
+                System.out.println("Position");
+                break;
+            case NAME:
+                System.out.println("Name");
+                break;
+            case HEIGHT:
+                System.out.println("Height");
+                break;
+            case WEIGHT:
+                System.out.println("Weight");
+                break;
+            case HOMETOWN:
+                System.out.println("Hometown");
+                break;
+            case HIGH_SCHOOL:
+                System.out.println("High School");
+                break;
+            default:
+                System.out.println("Field not recognized.");
+                break;
+        }
+        
+        Collections.sort(players, new Comparator<TableMember>() {
+            @Override
+            public int compare(TableMember fp1, TableMember fp2) {
+                return fp1.getAttribute(sortField)
+                        .compareTo(fp2.getAttribute(sortField));
+            }
+        });
+    }
+    
+    public int getSortField() {
+        return sortField;
+    }
+    
+    public void setSortField (int sortField) {
+        this.sortField = sortField;
     }
 
 }
