@@ -182,17 +182,17 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
         };
     }
     
-    private void sortByNumber () {
-        if (orders[NUMBER] == null) {
-            initSortByNumber();
+    public void sort () {
+        if (orders[sortField] == null) {
+            initSortField(sortField);
         }
-        Collections.sort(players, orders[NUMBER]);
+        Collections.sort(players, orders[sortField]);
     }
     
-    public void sort() {
+    private void initSortField (int sortField) {
         switch (sortField) {
             case NUMBER:
-                sortByNumber();
+                initSortByNumber();
                 break;
             case POSITION:
                 System.out.println("Position");
