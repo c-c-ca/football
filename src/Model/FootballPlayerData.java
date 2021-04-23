@@ -182,12 +182,25 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
         };
     }
     
+    private void initSortByHeight () {
+        orders[HEIGHT] = new Comparator<TableMember>() {
+            @Override
+            public int compare(TableMember fp1, TableMember fp2) {
+                Height h1 = ((FootballPlayer) fp1).getHeight();
+                Height h2 = ((FootballPlayer) fp2).getHeight();
+                return h1.compareTo(h2);
+            }
+        };
+    }
+    
     public void sort () {
         if (orders[sortField] == null) {
             initSortField(sortField);
         }
         Collections.sort(players, orders[sortField]);
     }
+    
+    
     
     private void initSortField (int sortField) {
         switch (sortField) {
@@ -201,6 +214,7 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
                 System.out.println("Name");
                 break;
             case HEIGHT:
+                initSortByHeight();
                 System.out.println("Height");
                 break;
             case WEIGHT:

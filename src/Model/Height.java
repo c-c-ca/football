@@ -2,7 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 
-public class Height {
+public class Height implements Comparable  {
     private int feet;
     private int inches;
     
@@ -26,6 +26,15 @@ public class Height {
     }
     public void setInches(int inches) {
         this.inches = inches;
+    }
+    
+    public int compareTo (Object o) {
+        Height other = (Height) o;
+        if (this.feet != other.feet) {
+            return this.feet - other.feet;
+        }
+        
+        return this.inches - other.inches;
     }
     
     @Override
