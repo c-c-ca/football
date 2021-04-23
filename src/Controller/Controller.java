@@ -7,6 +7,9 @@ import java.awt.*;
 import javax.swing.*; 
 import java.util.*;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseWheelEvent;
@@ -34,6 +37,7 @@ public class Controller {
     private void addListeners () {
         addMouseWheelListener();
         addHeaderListeners();
+        addSearchListener();
     }
     
     private void addMouseWheelListener () {
@@ -72,15 +76,36 @@ public class Controller {
                             header.setForeground(Color.WHITE);
                             
                             FootballPlayerData fpData = model.getFpData();
-                            fpData.setSortField(
-                                    headers.indexOf(header)
-                            );
+                            int idx = headers.indexOf(header);
+                            fpData.setSortField(idx);
+                            fpData.setSearchByField(idx);
                             fpData.sort();
                             updateView();
                         }
                     }
             );
         }
+    }
+    
+    private void addSearchListener () {
+        view.getInitialframe()
+                .getInitialPanel()
+                .getNp()
+                .getSearchField()
+                .addActionListener(new ActionListener () {
+                    public void actionPerformed (ActionEvent e) {
+                        JTextField searchField = (JTextField) e.getSource();
+                        searchField.setBackground(
+                                searchResultFound(searchField) ?
+                                        Color.RED :
+                                        Color.WHITE
+                        );
+                    }
+                });
+    }
+    
+    private boolean searchResultFound (JTextField searchField) {
+        return model.getFpData().search(searchField.getText());
     }
     
     private void updateView () {

@@ -8,6 +8,7 @@ import java.util.*;
 public class FootballPlayerData extends FootballPlayer implements TableData, Displayable, Sortable {
     
     private final static int DEFAULT_TABLE_SIZE = 10;
+    private final static int NUM_ATTRIBUTES = 7;
     
     private final static int NUMBER = 0;
     private final static int POSITION = 1;
@@ -18,20 +19,49 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
     private final static int HIGH_SCHOOL = 6;
     
     private ArrayList<TableMember> players;
+    private Comparator<TableMember>[] orders;
+    private Map<String, FootballPlayer>[] hashMaps;
     private int firstLineToDisplay;
     private int linesBeingDisplayed;
     private int lineToHighlight;
     private int sortField;
+    private int searchFieldIndex;
+    private boolean searchResultFound;
+    private int foundIndex;
 
 
     public FootballPlayerData()
     {
-        players = new ArrayList<>();
+        players = new ArrayList<TableMember>();
         firstLineToDisplay = 0;
         linesBeingDisplayed = DEFAULT_TABLE_SIZE;
         lineToHighlight = -1;
         sortField = NUMBER;
+        searchFieldIndex = NUMBER;
+        searchResultFound = false;
         loadTable();
+        initOrders();
+        initHashMaps();
+        sort();
+    }
+    
+    private void initOrders () {
+        orders = new Comparator[NUM_ATTRIBUTES];
+    }
+    
+    private void initHashMaps() {
+        hashMaps = new HashMap[NUM_ATTRIBUTES];
+        for (int i = 0; i < NUM_ATTRIBUTES; i++) {
+            hashMaps[i] = new HashMap<String, FootballPlayer>();
+            for (TableMember player : players) {
+                FootballPlayer fp = (FootballPlayer) player;
+                hashMaps[i].put(fp.getAttribute(i), fp);
+                if (i == 0) {
+                    System.out.println(fp.getAttribute(i));
+                }
+            }
+        }
+        System.out.println("Hash maps initialized");
     }
     
     @Override
@@ -142,10 +172,27 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
         }
     }
     
+    private void initSortByNumber () {
+        orders[NUMBER] = new Comparator<TableMember>() {
+            @Override
+            public int compare(TableMember fp1, TableMember fp2) {
+                return ((FootballPlayer) fp1).getNumber() -
+                       ((FootballPlayer) fp2).getNumber();
+            }
+        };
+    }
+    
+    private void sortByNumber () {
+        if (orders[NUMBER] == null) {
+            initSortByNumber();
+        }
+        Collections.sort(players, orders[NUMBER]);
+    }
+    
     public void sort() {
         switch (sortField) {
             case NUMBER:
-                System.out.println("Number");
+                sortByNumber();
                 break;
             case POSITION:
                 System.out.println("Position");
@@ -169,14 +216,6 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
                 System.out.println("Field not recognized.");
                 break;
         }
-        
-        Collections.sort(players, new Comparator<TableMember>() {
-            @Override
-            public int compare(TableMember fp1, TableMember fp2) {
-                return fp1.getAttribute(sortField)
-                        .compareTo(fp2.getAttribute(sortField));
-            }
-        });
     }
     
     public int getSortField() {
@@ -185,6 +224,40 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
     
     public void setSortField (int sortField) {
         this.sortField = sortField;
+    }
+    
+    public boolean search (String searchTerm) {
+        int searchByField = getSearchByField();
+        System.out.println("Search by field: " + searchByField);
+        FootballPlayer player = hashMaps[searchByField].get(searchTerm);
+        System.out.println("Found player: " + player);
+        setFound(player != null);
+        setFoundIndex(players.indexOf((TableMember) player));
+        return getFound();
+    }
+
+    public int getFoundIndex() {
+        return foundIndex;
+    }
+
+    public void setFoundIndex(int tableMemberIndex) {
+        foundIndex = tableMemberIndex;
+    }
+
+    public boolean getFound() {
+        return searchResultFound;
+    }
+
+    public void setFound(boolean searchResult) {
+        searchResultFound = searchResult;
+    }
+
+    public int getSearchByField() {
+        return searchFieldIndex;
+    }
+
+    public void setSearchByField(int fieldIndex) {
+        searchFieldIndex = fieldIndex;
     }
 
 }

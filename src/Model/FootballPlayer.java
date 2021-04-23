@@ -23,19 +23,19 @@ public class FootballPlayer extends Person implements TableMember {
     public String getAttribute(int n) {
         switch (n) { 
             case 0: 
-                return String.valueOf(this.number) + " ";
+                return String.valueOf(this.number) + "";
             case 1:
-                return this.position + " ";
+                return this.position + "";
             case 2:
-                return super.getName() + " ";
+                return super.getName() + "";
             case 3: 
-                return super.getHeight().toString() + " ";
+                return super.getHeight().toString() + "";
             case 4:
-                return String.valueOf(super.getWeight()) + " ";
+                return String.valueOf(super.getWeight()) + "";
             case 5:
-                return super.getHometown() + " ";
+                return super.getHometown() + "";
             case 6:
-                return super.getHighSchool() + " " + '\n';
+                return super.getHighSchool() + "";
             default:
                 return ("invalid input parameter");
         }
