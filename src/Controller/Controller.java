@@ -97,8 +97,8 @@ public class Controller {
                         JTextField searchField = (JTextField) e.getSource();
                         searchField.setBackground(
                                 searchResultFound(searchField) ?
-                                        Color.RED :
-                                        Color.WHITE
+                                        Color.WHITE :
+                                        Color.RED
                         );
                     }
                 });

@@ -173,7 +173,7 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
     }
     
     private void initSortByNumber () {
-        orders[NUMBER] = new Comparator<TableMember>() {
+        orders[sortField] = new Comparator<TableMember>() {
             @Override
             public int compare(TableMember fp1, TableMember fp2) {
                 return ((FootballPlayer) fp1).getNumber() -
@@ -182,8 +182,54 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
         };
     }
     
+    private void initSortByPosition () {
+        orders[sortField] = new Comparator<TableMember>() {
+            @Override
+            public int compare(TableMember fp1, TableMember fp2) {
+                return ((FootballPlayer) fp1).getPosition().compareTo(((FootballPlayer) fp2).getPosition());
+            }
+        };
+    }
+    
+    private void initSortByName () {
+        orders[sortField] = new Comparator<TableMember>() {
+            @Override
+            public int compare(TableMember fp1, TableMember fp2) {
+                    return ((FootballPlayer) fp1).getName().compareTo(((FootballPlayer) fp2).getName());
+            }
+        };
+        }
+
+    private void initSortByWeight () {
+        orders[sortField] = new Comparator<TableMember>() {
+            @Override
+            public int compare(TableMember fp1, TableMember fp2) {
+                return ((FootballPlayer) fp1).getWeight() -
+                       ((FootballPlayer) fp2).getWeight();
+            }
+        };
+    }
+    
+    private void initSortByHometown () {
+        orders[sortField] = new Comparator<TableMember>() {
+            @Override
+            public int compare(TableMember fp1, TableMember fp2) {
+                return ((FootballPlayer) fp1).getHometown().compareTo(((FootballPlayer) fp2).getHometown());
+            }
+        };
+    }
+    
+    private void initSortByHighschool () {
+        orders[sortField] = new Comparator<TableMember>() {
+            @Override
+            public int compare(TableMember fp1, TableMember fp2) {
+                return ((FootballPlayer) fp1).getHighSchool().compareTo(((FootballPlayer) fp2).getHighSchool());
+            }
+        };
+    }
+    
     private void initSortByHeight () {
-        orders[HEIGHT] = new Comparator<TableMember>() {
+        orders[sortField] = new Comparator<TableMember>() {
             @Override
             public int compare(TableMember fp1, TableMember fp2) {
                 Height h1 = ((FootballPlayer) fp1).getHeight();
@@ -200,31 +246,28 @@ public class FootballPlayerData extends FootballPlayer implements TableData, Dis
         Collections.sort(players, orders[sortField]);
     }
     
-    
-    
     private void initSortField (int sortField) {
         switch (sortField) {
             case NUMBER:
                 initSortByNumber();
                 break;
             case POSITION:
-                System.out.println("Position");
+                initSortByPosition();
                 break;
             case NAME:
-                System.out.println("Name");
+                initSortByName();
                 break;
             case HEIGHT:
                 initSortByHeight();
-                System.out.println("Height");
                 break;
             case WEIGHT:
-                System.out.println("Weight");
+                initSortByWeight();
                 break;
             case HOMETOWN:
-                System.out.println("Hometown");
+                initSortByHometown();
                 break;
             case HIGH_SCHOOL:
-                System.out.println("High School");
+                initSortByHighschool();
                 break;
             default:
                 System.out.println("Field not recognized.");
